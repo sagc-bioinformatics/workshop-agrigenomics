@@ -293,6 +293,10 @@ However, their high cost usually means they are paired with Illumina data in ord
 
 We will use the tool SPAdes (spades.py) to perform a de novo assembly from: 1) Illumina plus Nanopore reads and 2) Illumina plus PabCio CCS reads. 
 
+First, we'll be using some lower coverage Illumina data (10x) since higher coverage will be capable of assembling the genome into a single contig.
+Using what you have already learned, run the 10x coverage of Illumina reads through `fastp` prior to trying the below spades assemblies. 
+
+
 ```bash
 # Create the output directory ahead of time
 mkdir --parents ~/SARS-CoV-2/de_novo_assembly/
@@ -301,26 +305,26 @@ mkdir --parents ~/SARS-CoV-2/de_novo_assembly/
 time spades.py \
   --threads 2 \
   -o ~/SARS-CoV-2/de_novo_assembly/illumina \
-  -1 ~/SARS-CoV-2/qc_reads/Illumina/SRR11140748_1_50x.fastq.gz \
-  -2 ~/SARS-CoV-2/qc_reads/Illumina/SRR11140748_2_50x.fastq.gz \
+  -1 ~/SARS-CoV-2/qc_reads/Illumina/SRR11140748_1_10x.fastq.gz \
+  -2 ~/SARS-CoV-2/qc_reads/Illumina/SRR11140748_2_10x.fastq.gz \
 | tee ~/SARS-CoV-2/de_novo_assembly/illumina.log
 
 # Illumina plus Nanopore assembly
 time spades.py \
   --threads 2 \
   -o ~/SARS-CoV-2/de_novo_assembly/illumina_nanopore \
-  -1 ~/SARS-CoV-2/qc_reads/Illumina/SRR11140748_1_50x.fastq.gz \
-  -2 ~/SARS-CoV-2/qc_reads/Illumina/SRR11140748_2_50x.fastq.gz \
-  --nanopore ~/SARS-CoV-2/Nanopore/SRR11140749_1_50x.fastq.gz \
+  -1 ~/SARS-CoV-2/qc_reads/Illumina/SRR11140748_1_10x.fastq.gz \
+  -2 ~/SARS-CoV-2/qc_reads/Illumina/SRR11140748_2_10x.fastq.gz \
+  --nanopore ~/SARS-CoV-2/Nanopore/SRR11140749_1_10x.fastq.gz \
 | tee ~/SARS-CoV-2/de_novo_assembly/illumina_nanopore.log
 
 # Illumina plus PacBio CCS assembly
 time spades.py \
   --threads 2 \
   -o ~/SARS-CoV-2/de_novo_assembly/illumina_pacbio_ccs \
-  -1 ~/SARS-CoV-2/qc_reads/Illumina/SRR11140748_1_50x.fastq.gz \
-  -2 ~/SARS-CoV-2/qc_reads/Illumina/SRR11140748_2_50x.fastq.gz \
-  -s ~/SARS-CoV-2/PacBio/SRR13144524_1_50x.fastq.gz \
+  -1 ~/SARS-CoV-2/qc_reads/Illumina/SRR11140748_1_10x.fastq.gz \
+  -2 ~/SARS-CoV-2/qc_reads/Illumina/SRR11140748_2_10x.fastq.gz \
+  -s ~/SARS-CoV-2/PacBio/SRR13144524_1_10x.fastq.gz \
 | tee ~/SARS-CoV-2/de_novo_assembly/illumina_pacbio_ccs.log
 ```
 
@@ -337,7 +341,7 @@ pigz -dcp2 \
   < ~/SARS-CoV-2/reference/NC_045512.2.fasta.gz \
   > ~/SARS-CoV-2/reference/NC_045512.2.fasta
 
-# Run nucmer from MUMmer package
+# Illumina-only assembly
 nucmer \
   --maxmatch \
   --minmatch 100 \
@@ -346,6 +350,7 @@ nucmer \
   ~/SARS-CoV-2/reference/NC_045512.2.fasta \
   ~/SARS-CoV-2/de_novo_assembly/illumina/contigs.fasta
 
+# Illumina plus Nanopore assembly
 nucmer \
   --maxmatch \
   --minmatch 100 \
@@ -354,6 +359,7 @@ nucmer \
   ~/SARS-CoV-2/reference/NC_045512.2.fasta \
   ~/SARS-CoV-2/de_novo_assembly/illumina_nanopore/contigs.fasta
 
+# Illumina plus PacBio CCS assembly
 nucmer \
   --maxmatch \
   --minmatch 100 \
