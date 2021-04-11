@@ -16,6 +16,13 @@ User/password creation/management.
   where:
     -h Show this help text
     -a Action to perform (create|chpass|lock|unlock|pwon|pwoff|delete)
+      create: create users with passwords
+      chpass: change the user's passwords
+      lock:   lock user's passwords
+      unlock: unlock user's passwords
+      pwon:   allow password authentication in SSH
+      pwoff:  disable password authentication in SSH
+      delete: delete user accounts
     -u Username prefix (default: ${USERNAME_PREFIX})
     -s Username suffix start number (default: ${USERNAME_SUFFIX_START})
     -e Username suffix end number (default: ${USERNAME_SUFFIX_END})
