@@ -19,7 +19,7 @@
 | 13:20 - 16:00 | 160          | Hands-on     | Nathan Watson-Haigh | [Genome Assembly Concepts]                     |
 | 16:00 - 17:00 | 60           | Social       |                     |                                                |
 
-[Genome Assembly Concepts]: Practicals/Genome_Assembly_Concepts/index.Md
+[Genome Assembly Concepts]: Practicals/Genome_Assembly_Concepts/index.md
 
 ## Acknowledgements
 
